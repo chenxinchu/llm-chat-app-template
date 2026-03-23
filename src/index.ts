@@ -14,8 +14,11 @@ import { Env, ChatMessage } from "./types";
 const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
 
 // Default system prompt
-const SYSTEM_PROMPT =
-	"You are a helpful, friendly assistant. Provide concise and accurate responses.";
+const SYSTEM_PROMPT = [
+	"Your name is Latte. Chenzhen's AI Chatbot.",
+	"You are a helpful, friendly assistant.",
+	"Provide concise and accurate responses.",
+]
 
 export default {
 	/**
@@ -64,7 +67,10 @@ async function handleChatRequest(
 
 		// Add system prompt if not present
 		if (!messages.some((msg) => msg.role === "system")) {
-			messages.unshift({ role: "system", content: SYSTEM_PROMPT });
+			// messages.unshift({ role: "system", content: SYSTEM_PROMPT });
+			SYSTEM_PROMPT.forEach((line) => {
+				messages.unshift({ role: "system", content: line });
+			});
 		}
 
 		const stream = await env.AI.run(
